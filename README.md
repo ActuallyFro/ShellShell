@@ -18,5 +18,5 @@ Features
 
 Release History
 ---------------
-0.1.0 - Initial Release [f9eb3ea4c97b555d44c5e497aafb067f]
-0.1.1 - Spellchecked Edition [584ff8469bcb5b0dba852e0a3785ee22]
+0.1.0 - Initial Release [f9eb3ea4c97b555d44c5e497aafb067f]  
+0.1.1 - Spellchecked Edition [584ff8469bcb5b0dba852e0a3785ee22]  
