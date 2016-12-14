@@ -1,6 +1,6 @@
 ShellShell
 ==========
-Version: 0.1.3
+Version: 1.0.1
 
 This script can be leveraged as a simple script starter having basic features.
 These features include the printing of a help message, license, printing of the
@@ -22,3 +22,5 @@ Release History
 0.1.1 - Spellchecked Edition [584ff8469bcb5b0dba852e0a3785ee22]  
 0.1.2 - CRC's are good... [3402050992fdc907a9daeb94fa1ac8e6]  
 0.1.3 - Working CRC's are better... [122be72a3699a71daf921a066c7be563]  
+1.0.0 - It looks to all work...[91f2b5287c0fbd6c45bf39133703b5d2]
+1.0.1 - This *might* work [0b832bc38f3836bb30e8720a15eaa92d]
