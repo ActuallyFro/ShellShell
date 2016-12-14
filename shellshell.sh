@@ -1,5 +1,5 @@
 #!/bin/bash
-Version="0.1.2"
+Version="0.1.3"
 Name="shellshell"
 url="https://raw.githubusercontent.com/ActuallyFro/ShellShell/master/shellshell.sh"
 
@@ -89,6 +89,21 @@ if [[ "$OType_1" == "--version" ]];then
    exit
 fi
 
+if [[ "$1" == "--check-script" ]] || [[ "$1" == "--crc" ]];then
+   CRCRan=`$0 --version | grep "md5" | tr ":" "\n" | grep -v "md5" | tr -d " "`
+   CRCScript=`cat $0 | grep "less lines" | grep -v "md5sum" | grep -v "cat" | tr ":" "\n" | grep -v "md5" | tr -d " "`
+
+   if [[ "$CRCRan" == "$CRCScript" ]]; then
+      echo "$0 is good!"
+   else
+      echo "The checksums didn't match!"
+      echo "1. $CRCRan  (vs.)"
+      echo "2. $CRCScript"
+   fi
+   exit
+fi
+
+
 if [[ "$1" == "--update" ]];then
    echo ""
    if [[ "`which wget`" != "" ]]; then
@@ -99,21 +114,6 @@ if [[ "$1" == "--update" ]];then
       curl $url > /tmp/junk$ToolName
    else
       echo "... or I cant; Install wget or curl"
-   fi
-
-   if [[ "$1" == "--check-script" ]] || [[ "$1" == "--crc" ]];then
-      CRCRan=`$0 --version | grep "md5" | tr ":" "\n" | grep -v "md5" | tr -d " "`
-      CRCScript=`cat $0 | grep "less lines" | grep -v "md5sum" | grep -v "cat" | tr ":" "\n" | grep -v "md5" | tr -d " "`
-
-      if [[ "$CRCRan" == "$CRCScript" ]]; then
-         echo "$0 is good!"
-      else
-         echo "The checksums didn't match!"
-         echo "1. $CRCRan  (vs.)"
-         echo "2. $CRCScript"
-
-      fi
-      exit
    fi
 
    if [[ -f /tmp/junk$ToolName ]]; then
