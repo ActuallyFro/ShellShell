@@ -1,5 +1,5 @@
 #!/bin/bash
-Version="0.1.1"
+Version="0.1.2"
 Name="shellshell"
 url="https://raw.githubusercontent.com/ActuallyFro/ShellShell/master/shellshell.sh"
 
@@ -101,6 +101,21 @@ if [[ "$1" == "--update" ]];then
       echo "... or I cant; Install wget or curl"
    fi
 
+   if [[ "$1" == "--check-script" ]] || [[ "$1" == "--crc" ]];then
+      CRCRan=`$0 --version | grep "md5" | tr ":" "\n" | grep -v "md5" | tr -d " "`
+      CRCScript=`cat $0 | grep "less lines" | grep -v "md5sum" | grep -v "cat" | tr ":" "\n" | grep -v "md5" | tr -d " "`
+
+      if [[ "$CRCRan" == "$CRCScript" ]]; then
+         echo "$0 is good!"
+      else
+         echo "The checksums didn't match!"
+         echo "1. $CRCRan  (vs.)"
+         echo "2. $CRCScript"
+
+      fi
+      exit
+   fi
+
    if [[ -f /tmp/junk$ToolName ]]; then
       lastVers="$Version"
       newVers=`cat /tmp/junk$ToolName | grep "Version=" | grep -v "cat" | tr "\"" "\n" | grep "\."`
@@ -134,4 +149,4 @@ if [[ "$1" == "--update" ]];then
    exit
 fi
 
-### Current File MD5 (less this line): 584ff8469bcb5b0dba852e0a3785ee22
+### Current File MD5 (less this line): 3402050992fdc907a9daeb94fa1ac8e6
