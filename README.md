@@ -25,3 +25,4 @@ Release History
 1.0.0 - It looks to all work...[91f2b5287c0fbd6c45bf39133703b5d2]  
 1.0.1 - This *might* work [0b832bc38f3836bb30e8720a15eaa92d]  
 1.0.2 - FINALLY! [1348e6107acb1e459a2147e5bee6fe2a]  
+1.1.0 - Changed the parsing system to case [bf41fd5fefa387aa8477eb12a0918e9a]

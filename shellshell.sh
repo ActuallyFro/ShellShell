@@ -1,11 +1,11 @@
 #!/bin/bash
-Version="1.0.2"
+Version="1.1.0"
 Name="shellshell"
 url="https://raw.githubusercontent.com/ActuallyFro/ShellShell/master/shellshell.sh"
 
 read -d '' HelpMessage << EOF
 ShellShell ($Name) v$Version
-==========================
+==============================
 This script can be leveraged as a simple script starter having basic features.
 These features include the printing of a help message, license, printing of the
 current version, and 'updating' of the shell from an online resource.
@@ -44,67 +44,54 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 EOF
 
-OType_1=$1
-#IName_2=$2
-#OName_3=$3
+while [[ $# -gt 0 ]]; do
+   parsearg="$1" #read in the first argument
 
-#WorkingDir=`echo $0 | sed 's/\/"$Name".sh//g'| sed 's/"$Name".sh//g'`
-#if [[ "$WorkingDir" == "" ]]; then
-#  WorkingDir=`which $Name`
-#fi
-#echo "[Debug] This is the location of $Name: $WorkingDir"
+   case $parsearg in
+   --license)
+      echo ""
+      echo "$License"
+      exit
+   ;;
+   -h|--help)
+      echo ""
+      echo "$HelpMessage"
+      exit
+   ;;
+   -i|--install)
+      echo ""
+      echo "Attempting to install $0 to /bin"
 
-if [[ "$OType_1" == "--license" ]];then
-   echo ""
-   echo "$License"
-   exit
-fi
-
-if [[ "$OType_1" == "--install" ]];then
-   echo ""
-   echo "Attempting to install $0 to /bin"
-
-   User=`whoami`
-   if [[ "$User" != "root" ]]; then
-      echo "[WARNING] Currently NOT root!"
-   fi
-   cp $0 /bin/$Name
-   Check=`ls /bin/$Name | wc -l`
-   if [[ "$Check" == "1" ]]; then
-      echo "$Name installed successfully!"
-   fi
-   exit
-fi
-
-if [[ "$OType_1" == "--help" ]] || [[ "$OType_1" == "-h" ]];then
-   echo ""
-   echo "$HelpMessage"
-   exit
-fi
-
-if [[ "$OType_1" == "--version" ]];then
-   echo ""
-   echo "Version: $Version"
-   echo "md5 (less last line): "`cat $0 | grep -v "###" | md5sum | awk '{print $1}'`
-   exit
-fi
-
-if [[ "$1" == "--check-script" ]] || [[ "$1" == "--crc" ]];then
-   CRCRan=`$0 --version | grep "md5" | tr ":" "\n" | grep -v "md5" | tr -d " "`
-   CRCScript=`tail -1 $0 | grep -v "md5sum" | grep -v "cat" | tr ":" "\n" | grep -v "md5" | tr -d " " | grep -v "#"`
-
-   if [[ "$CRCRan" == "$CRCScript" ]]; then
-      echo "$0 is good!"
-   else
-      echo "The checksums didn't match!"
-      echo "1. $CRCRan  (vs.)"
-      echo "2. $CRCScript"
-   fi
-   exit
-fi
-
-
-if [[ "$1" == "--update" ]];then
+      User=`whoami`
+      if [[ "$User" != "root" ]]; then
+         echo "[WARNING] Currently NOT root!"
+      fi
+      cp $0 /bin/$Name
+      Check=`ls /bin/$Name | wc -l`
+      if [[ "$Check" == "1" ]]; then
+         echo "$Name installed successfully!"
+      fi
+      exit
+   ;;
+   --version)
+      echo ""
+      echo "Version: $Version"
+      echo "md5 (less last line): "`cat $0 | grep -v "###" | md5sum | awk '{print $1}'`
+      exit
+   ;;
+   --crc|--check-script)
+      CRCRan=`$0 --version | grep "md5" | tr ":" "\n" | grep -v "md5" | tr -d " "`
+      CRCScript=`tail -1 $0 | grep -v "md5sum" | grep -v "cat" | tr ":" "\n" | grep -v "md5" | tr -d " " | grep -v "#"`
+      if [[ "$CRCRan" == "$CRCScript" ]]; then
+         echo "$0 is good!"
+      else
+         echo "The checksums didn't match!"
+         echo "1. $CRCRan  (vs.)"
+         echo "2. $CRCScript"
+      fi
+      exit
+   ;;
+   -u|--update)
    echo ""
    if [[ "`which wget`" != "" ]]; then
       echo "Grabbing latest GitHub commit..."
@@ -147,6 +134,29 @@ if [[ "$1" == "--update" ]];then
       echo "Well ... that happened. (Check your Inet; the new $ToolName couldn't be grabbed!"
    fi
    exit
-fi
+   ;;
+   #-----------------------------------#
+   ## EXAMPLE COMMANDS -- START ##
+   -e|--example)
+      EXVAR="$2"
+      shift #needs to skip var, since its NOT a flag
+   ;;
+   -v|-d|--debug)
+      DEBUG=YES
+   ;;
+   ## EXAMPLE COMMANDS -- END ##
+   #-----------------------------------#
+   *)
+      #The catch all; Throw warnings or don't...
+      echo "[WARNING] Option: $1 -- NOT RECOGNIZED!"
+   ;;
+   esac
 
-### Current File MD5 (less this line): 1348e6107acb1e459a2147e5bee6fe2a
+   shift #check next parsed arg
+done
+
+###########################################################
+# Main Program Goes here; parsing of variables is completed
+###########################################################
+
+### Current File MD5 (less this line): bf41fd5fefa387aa8477eb12a0918e9a
