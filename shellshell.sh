@@ -1,10 +1,10 @@
 #!/bin/bash
-Version="1.1.0"
-Name="shellshell"
-url="https://raw.githubusercontent.com/ActuallyFro/ShellShell/master/shellshell.sh"
+ProgVersion="1.1.1"
+ProgName="shellshell"
+ProgUrl="https://raw.githubusercontent.com/ActuallyFro/ShellShell/master/shellshell.sh"
 
 read -d '' HelpMessage << EOF
-ShellShell ($Name) v$Version
+ShellShell ($ProgName) v$ProgVersion
 ==============================
 This script can be leveraged as a simple script starter having basic features.
 These features include the printing of a help message, license, printing of the
@@ -19,7 +19,7 @@ Other Options
 -------------
 --license - print license
 --version - print version number
---install - copy this script to /bin/($Name)
+--install - copy this script to /bin/($ProgName)
 --update  - update to the most recent GitHub commit
 EOF
 
@@ -48,6 +48,17 @@ while [[ $# -gt 0 ]]; do
    parsearg="$1" #read in the first argument
 
    case $parsearg in
+   #-----------------------------------#
+   ## EXAMPLE COMMANDS -- START ##
+   -e|--example)
+      EXVAR="$2"
+      shift #needs to skip var, since its NOT a flag
+   ;;
+   -v|-d|--debug)
+      DEBUG=YES
+   ;;
+   ## EXAMPLE COMMANDS -- END ##
+   #-----------------------------------#
    --license)
       echo ""
       echo "$License"
@@ -66,16 +77,16 @@ while [[ $# -gt 0 ]]; do
       if [[ "$User" != "root" ]]; then
          echo "[WARNING] Currently NOT root!"
       fi
-      cp $0 /bin/$Name
-      Check=`ls /bin/$Name | wc -l`
+      cp $0 /bin/$ProgName
+      Check=`ls /bin/$ProgName | wc -l`
       if [[ "$Check" == "1" ]]; then
-         echo "$Name installed successfully!"
+         echo "$ProgName installed successfully!"
       fi
       exit
    ;;
    --version)
       echo ""
-      echo "Version: $Version"
+      echo "Version: $ProgVersion"
       echo "md5 (less last line): "`cat $0 | grep -v "###" | md5sum | awk '{print $1}'`
       exit
    ;;
@@ -95,57 +106,46 @@ while [[ $# -gt 0 ]]; do
    echo ""
    if [[ "`which wget`" != "" ]]; then
       echo "Grabbing latest GitHub commit..."
-      wget $url -O /tmp/junk$ToolName
+      wget $ProgUrl -O /tmp/junk$ProgName
    elif [[ "`which curl`" != "" ]]; then
       echo "Grabbing latest GitHub commit...with curl...ew"
-      curl $url > /tmp/junk$ToolName
+      curl $ProgUrl > /tmp/junk$ProgName
    else
       echo "... or I cant; Install wget or curl"
    fi
 
-   if [[ -f /tmp/junk$ToolName ]]; then
-      lastVers="$Version"
-      newVers=`cat /tmp/junk$ToolName | grep "Version=" | grep -v "cat" | tr "\"" "\n" | grep "\."`
+   if [[ -f /tmp/junk$ProgName ]]; then
+      lastVers="$ProgVersion"
+      newVers=`cat /tmp/junk$ProgName | grep "Version=" | grep -v "cat" | tr "\"" "\n" | grep "\."`
 
       lastVersHack=`echo "$lastVers" | tr "." " " | awk '{printf("9%04d%04d%04d",$1,$2,$3)}'`
       newVersHack=`echo "$newVers" | tr "." " " | awk '{printf("9%04d%04d%04d",$1,$2,$3)}'`
 
       echo ""
       if [[ "$lastVersHack" -lt "$newVersHack" ]]; then
-         echo "Updating $ToolName to $newVers"
-         chmod +x /tmp/junk$ToolName
+         echo "Updating $ProgName to $newVers"
+         chmod +x /tmp/junk$ProgName
 
          echo "Checking the CRC..."
-         CheckCRC=`/tmp/junk$ToolName --check-script | grep "good" | wc -l`
+         CheckCRC=`/tmp/junk$ProgName --check-script | grep "good" | wc -l`
 
          if [[ "$CheckCRC" == "1" ]]; then
             echo "Installing ..."
-            /tmp/junk$ToolName --install
+            /tmp/junk$ProgName --install
          else
             echo "ERROR! The CRC failed, considering file to be bad!"
-            rm /tmp/junk$ToolName
+            rm /tmp/junk$ProgName
             exit
          fi
-         rm /tmp/junk$ToolName
+         rm /tmp/junk$ProgName
       else
          echo "You are up to date! ($lastVers)"
       fi
    else
-      echo "Well ... that happened. (Check your Inet; the new $ToolName couldn't be grabbed!"
+      echo "Well ... that happened. (Check your Inet; the new $ProgName couldn't be grabbed!"
    fi
    exit
    ;;
-   #-----------------------------------#
-   ## EXAMPLE COMMANDS -- START ##
-   -e|--example)
-      EXVAR="$2"
-      shift #needs to skip var, since its NOT a flag
-   ;;
-   -v|-d|--debug)
-      DEBUG=YES
-   ;;
-   ## EXAMPLE COMMANDS -- END ##
-   #-----------------------------------#
    *)
       #The catch all; Throw warnings or don't...
       echo "[WARNING] Option: $1 -- NOT RECOGNIZED!"
@@ -159,4 +159,4 @@ done
 # Main Program Goes here; parsing of variables is completed
 ###########################################################
 
-### Current File MD5 (less this line): bf41fd5fefa387aa8477eb12a0918e9a
+### Current File MD5 (less this line): b94fb36e19015d6683aff601b5cf99a7
