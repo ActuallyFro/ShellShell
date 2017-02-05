@@ -1,9 +1,9 @@
-#!/bin/bash
-ProgVersion="1.1.1"
+#!/bin/sh
+ProgVersion="2.0.0"
 ProgName="shellshell"
 ProgUrl="https://raw.githubusercontent.com/ActuallyFro/ShellShell/master/shellshell.sh"
 
-read -d '' HelpMessage << EOF
+HelpMessage=$(cat<<EOF
 ShellShell ($ProgName) v$ProgVersion
 ==============================
 This script can be leveraged as a simple script starter having basic features.
@@ -22,8 +22,9 @@ Other Options
 --install - copy this script to /bin/($ProgName)
 --update  - update to the most recent GitHub commit
 EOF
+)
 
-read -d '' License << EOF
+License=$(cat<<EOF
 Copyright (c) 2016 Brandon Froberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -43,8 +44,9 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 EOF
+)
 
-while [[ $# -gt 0 ]]; do
+while [ "$#" -gt "0" ]; do
    parsearg="$1" #read in the first argument
 
    case $parsearg in
@@ -74,12 +76,12 @@ while [[ $# -gt 0 ]]; do
       echo "Attempting to install $0 to /bin"
 
       User=`whoami`
-      if [[ "$User" != "root" ]]; then
+      if [ "$User" != "root" ]; then
          echo "[WARNING] Currently NOT root!"
       fi
       cp $0 /bin/$ProgName
       Check=`ls /bin/$ProgName | wc -l`
-      if [[ "$Check" == "1" ]]; then
+      if [ "$Check" = "1" ]; then
          echo "$ProgName installed successfully!"
       fi
       exit
@@ -93,7 +95,7 @@ while [[ $# -gt 0 ]]; do
    --crc|--check-script)
       CRCRan=`$0 --version | grep "md5" | tr ":" "\n" | grep -v "md5" | tr -d " "`
       CRCScript=`tail -1 $0 | grep -v "md5sum" | grep -v "cat" | tr ":" "\n" | grep -v "md5" | tr -d " " | grep -v "#"`
-      if [[ "$CRCRan" == "$CRCScript" ]]; then
+      if [ "$CRCRan" = "$CRCScript" ]; then
          echo "$0 is good!"
       else
          echo "The checksums didn't match!"
@@ -104,17 +106,17 @@ while [[ $# -gt 0 ]]; do
    ;;
    -u|--update)
    echo ""
-   if [[ "`which wget`" != "" ]]; then
+   if [ "`which wget`" != "" ]; then
       echo "Grabbing latest GitHub commit..."
       wget $ProgUrl -O /tmp/junk$ProgName
-   elif [[ "`which curl`" != "" ]]; then
+   elif [ "`which curl`" != "" ]; then
       echo "Grabbing latest GitHub commit...with curl...ew"
       curl $ProgUrl > /tmp/junk$ProgName
    else
       echo "... or I cant; Install wget or curl"
    fi
 
-   if [[ -f /tmp/junk$ProgName ]]; then
+   if [ -f /tmp/junk$ProgName ]; then
       lastVers="$ProgVersion"
       newVers=`cat /tmp/junk$ProgName | grep "Version=" | grep -v "cat" | tr "\"" "\n" | grep "\."`
 
@@ -122,14 +124,14 @@ while [[ $# -gt 0 ]]; do
       newVersHack=`echo "$newVers" | tr "." " " | awk '{printf("9%04d%04d%04d",$1,$2,$3)}'`
 
       echo ""
-      if [[ "$lastVersHack" -lt "$newVersHack" ]]; then
+      if [ "$lastVersHack" -lt "$newVersHack" ]; then
          echo "Updating $ProgName to $newVers"
          chmod +x /tmp/junk$ProgName
 
          echo "Checking the CRC..."
          CheckCRC=`/tmp/junk$ProgName --check-script | grep "good" | wc -l`
 
-         if [[ "$CheckCRC" == "1" ]]; then
+         if [ "$CheckCRC" = "1" ]; then
             echo "Installing ..."
             /tmp/junk$ProgName --install
          else
@@ -159,4 +161,4 @@ done
 # Main Program Goes here; parsing of variables is completed
 ###########################################################
 
-### Current File MD5 (less this line): b94fb36e19015d6683aff601b5cf99a7
+### Current File MD5 (less this line): 2c148e64b72cc72ff2206528db5ed75a
