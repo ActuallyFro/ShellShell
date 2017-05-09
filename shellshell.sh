@@ -1,5 +1,5 @@
 #!/bin/sh
-ProgVersion="2.0.0"
+ProgVersion="2.1.0"
 ProgName="shellshell"
 ProgUrl="https://raw.githubusercontent.com/ActuallyFro/ShellShell/master/shellshell.sh"
 
@@ -89,12 +89,12 @@ while [ "$#" -gt "0" ]; do
    --version)
       echo ""
       echo "Version: $ProgVersion"
-      echo "md5 (less last line): "`cat $0 | grep -v "###" | md5sum | awk '{print $1}'`
+      echo "sha256 (less last line): "`cat $0 | grep -v "###" | sha256sum | awk '{print $1}'`
       exit
    ;;
    --crc|--check-script)
-      CRCRan=`$0 --version | grep "md5" | tr ":" "\n" | grep -v "md5" | tr -d " "`
-      CRCScript=`tail -1 $0 | grep -v "md5sum" | grep -v "cat" | tr ":" "\n" | grep -v "md5" | tr -d " " | grep -v "#"`
+      CRCRan=`$0 --version | grep "sha256" | tr ":" "\n" | grep -v "sha256" | tr -d " "`
+      CRCScript=`tail -1 $0 | grep -v "sha256sum" | grep -v "cat" | tr ":" "\n" | grep -v "sha256" | tr -d " " | grep -v "#"`
       if [ "$CRCRan" = "$CRCScript" ]; then
          echo "$0 is good!"
       else
@@ -161,4 +161,4 @@ done
 # Main Program Goes here; parsing of variables is completed
 ###########################################################
 
-### Current File MD5 (less this line): 2c148e64b72cc72ff2206528db5ed75a
+### Current File sha256 (less this line): 231191209e850eb48c87711c6b8136ed582050f4c81238c9c1b50a9d2bceb544

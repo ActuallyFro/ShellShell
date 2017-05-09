@@ -1,6 +1,6 @@
 ShellShell
 ==========
-Version: 1.1.1
+Version: 2.1.0
 
 This script can be leveraged as a simple script starter having basic features.
 These features include the printing of a help message, license, printing of the
@@ -27,3 +27,5 @@ Release History
 1.0.2 - FINALLY! [1348e6107acb1e459a2147e5bee6fe2a]  
 1.1.0 - Changed the parsing system to case [bf41fd5fefa387aa8477eb12a0918e9a]
 1.1.1 - Updated to a better set of program variables [b94fb36e19015d6683aff601b5cf99a7]
+2.0.0 - I did some stuff - no idea what[]
+2.1.0 - Moved the system to sha256 [231191209e850eb48c87711c6b8136ed582050f4c81238c9c1b50a9d2bceb544]
